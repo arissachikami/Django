@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% block title %}Lista Postagens{% endblock %}
+
+{% block content %}
+	<h1>Todos os Posts</h1>
+    {% for post in posts %}  
+    <p>{{post.title}}</p> 
+    <a href="{% url 'post-create' %}">Criar um Post</a>
+{% endfor %}
+
+{% endblock content %}
