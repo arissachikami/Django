@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
-from django.contrib.auth.models import User
+from django.contrib.auth import login as login_django
 from django.contrib.auth import authenticate
+
 
 def login(request):
     if request.method == 'POST':
@@ -8,7 +9,7 @@ def login(request):
         password= request.POST.get('password')
         user = authenticate(username = username, password = password)
         if user is not None:
-            print(user)
+            login_django(request, user)
             return redirect('home')
     return render(request, 'index.html')
 

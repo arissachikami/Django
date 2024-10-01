@@ -1,0 +1,46 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerenciar Participantes</title>
+</head>
+<body>
+    <div class="container">
+        <h1>Gerenciar Participantes do Projeto: {{ projeto.name }}</h1>
+
+        {% if request.user == projeto.criador %}
+            <h2>Adicionar Participante</h2>
+            <form method="POST" action="{% url 'adicionar_participante' projeto.id %}">
+                {% csrf_token %}
+                <select name="participante">
+                    {% for usuario in usuarios %}
+                        <option value="{{ usuario.id }}">{{ usuario.username }}</option>
+                    {% endfor %}
+                </select>
+                <button type="submit">Adicionar</button>
+            </form>
+
+            <h2>Participantes Atuais</h2>
+            <ul>
+                {% for participante in projeto.participantes.all %}
+                    <li>
+                        {{ participante.username }}
+                        <form method="POST" action="{% url 'remover_participante' projeto.id participante.id %}" style="display:inline;">
+                            {% csrf_token %}
+                            <button type="submit">Remover</button>
+                        </form>
+                    </li>
+                {% endfor %}
+            </ul>
+            {% else %}
+            <p>Você não tem permissão para gerenciar os participantes deste projeto.</p>
+        </div>    
+        <a href="{% url 'home' %}" class="back-link">Voltar para a página inicial</a>
+    {% endif %}
+
+    <a href="{% url 'home' %}">Cancelar</a>
+</body>
+</html>
